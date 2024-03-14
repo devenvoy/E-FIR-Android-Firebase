@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_up"
+    app:startDestination="@id/phoneNumber">
+
+    <fragment
+        android:id="@+id/phoneNumber"
+        android:name="com.example.e_fir.ui.auth.PhoneNumber"
+        android:label="fragment_phone_number"
+        tools:layout="@layout/fragment_phone_number" >
+        <action
+            android:id="@+id/action_phoneNumber_to_otpNumber"
+            app:destination="@id/otpNumber" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpNumber"
+        android:name="com.example.e_fir.ui.auth.otpNumber"
+        android:label="fragment_otp_number"
+        tools:layout="@layout/fragment_otp_number" />
+</navigation>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">E-FIR</string>
+    <string name="enter_number">Enter Mobile No.</string>
+    <string name="help_number">Please enter your Phone Number</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="validate">Validate OTP</string>
+    <string name="send_otp">SEND OTP</string>
+    <string name="help_otp">Please Enter Verification Code Send To</string>
+    <string name="terms_condition">By clicking start, you agree to out \n<u><font color='#2222F4'>Privacy Policy and Terms and Conditions</font></u></string>
+    <string name="close">Close</string>
+    <string name="open">Open</string>
+    <string name="fab_sos">Emergency SOS Button</string>
+    <string name="register_e_fir">Register e-Fir</string>
+    <string name="behalf">On SomeOne\'s behalf</string>
+    <string name="self">Self</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="trans">TransGender</string>
+
+
+    <string name="help_content">Max Limit: 3000\nPlease follow the following steps:\n1.Enter te full FIR content</string>
+    <string name="help_content2">Enter Signature image (.png)</string>
+    <string name="upld_sign">Upload\nSignature</string>
+
+
+</resources>

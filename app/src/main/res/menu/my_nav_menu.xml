@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/black"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/callUs"
+        android:icon="@drawable/ic_phone1"
+        android:title="Call Us" />
+    <item
+        android:id="@+id/emergencyNum"
+        android:icon="@drawable/ic_phone1"
+        android:title="Emergency Number" />
+    <item
+        android:id="@+id/unistallApps"
+        android:icon="@drawable/ic_unistall_apps"
+        android:title="Unistall Banned Apps" />
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_unistall_apps"
+        android:title="Logout" />
+
+</menu>
