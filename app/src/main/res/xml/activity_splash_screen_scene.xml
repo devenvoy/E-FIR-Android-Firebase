@@ -5,6 +5,7 @@
 
     <Transition
         motion:constraintSetEnd="@+id/end"
+        motion:autoTransition="animateToEnd"
         motion:constraintSetStart="@id/start"
         motion:duration="2000">
        <KeyFrameSet>

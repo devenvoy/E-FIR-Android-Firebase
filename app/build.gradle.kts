@@ -49,6 +49,9 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.activity:activity:1.8.2")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.1")
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -69,6 +72,12 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
     // Auth
     implementation("com.google.firebase:firebase-auth")
+
+
+    implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
+
+    implementation("com.google.firebase:firebase-storage-ktx")
+
 
 
 }

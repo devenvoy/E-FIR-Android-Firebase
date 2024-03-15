@@ -34,29 +34,53 @@
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_firl"
+        android:id="@+id/startDatel"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/actionbar"
-        android:layout_margin="20dp"
-        android:hint="FIR No."
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:hint="Select Start Date"
         app:endIconMode="clear_text"
         app:endIconTint="@color/ColorPrimary"
-        app:startIconDrawable="@drawable/ic_search"
+        app:startIconDrawable="@drawable/calendar_m"
         app:startIconTint="@color/ColorPrimary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_fir"
+            android:id="@+id/startDate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/endDatel"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startDatel"
+        android:layout_margin="20dp"
+        android:hint="Select End Date"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/ColorPrimary"
+        app:startIconDrawable="@drawable/calendar_m"
+        app:startIconTint="@color/ColorPrimary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/endDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fir_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_firl"
+        android:layout_below="@id/endDatel"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
