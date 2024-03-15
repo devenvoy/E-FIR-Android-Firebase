@@ -16,8 +16,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.e_fir.R
+import com.example.e_fir.data.Singletons.StatesDbHandler
 import com.example.e_fir.data.constants.Companion.complaintList
-import com.example.e_fir.data.constants.Companion.gujratDistrict
+import com.example.e_fir.data.constants.Companion.districtList
 import com.example.e_fir.data.constants.Companion.stateList
 import com.example.e_fir.data.constants.Companion.subComplaintList
 import com.example.e_fir.data.constants.Companion.suratpolicestnList
@@ -79,16 +80,35 @@ class RegisterFirFragment : Fragment() {
         database = Firebase.database
         currentUser = auth.currentUser!!
 
+        val db = StatesDbHandler.getDb(requireActivity())
+
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, stateList)
-        val districtAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, gujratDistrict)
-        val psAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, suratpolicestnList)
-        val complaintAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, complaintList)
-        val subComAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, subComplaintList)
         binding.state.setAdapter(stateAdapter)
-        binding.district.setAdapter(districtAdapter)
-        binding.policestn.setAdapter(psAdapter)
+        val complaintAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, complaintList)
         binding.compNature.setAdapter(complaintAdapter)
+
+        val psAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, suratpolicestnList)
+        binding.policestn.setAdapter(psAdapter)
+
+        var districtAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, districtList)
+        binding.district.setAdapter(districtAdapter)
+
+        var subComAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, subComplaintList)
         binding.subcompNature.setAdapter(subComAdapter)
+
+        binding.state.setOnItemClickListener { parent, view, position, id ->
+            districtList = db.statesDao.getDistrictData(stateList[position])
+            districtAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, districtList)
+            binding.district.setAdapter(districtAdapter)
+            binding.district.text.clear()
+        }
+
+        binding.compNature.setOnItemClickListener { parent, view, position, id ->
+            subComplaintList = db.statesDao.getsubComplaints(complaintList[position].C_ID)
+            subComAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, subComplaintList)
+            binding.subcompNature.setAdapter(subComAdapter)
+            binding.subcompNature.text.clear()
+        }
 
         binding.btnSubmit.setOnClickListener {
             if (validateForm()) {
