@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
 }
 
 android {
@@ -69,7 +70,7 @@ dependencies {
 
     // Firebase
     // BOM
-    implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     // Auth
     implementation("com.google.firebase:firebase-auth")
 
@@ -77,6 +78,11 @@ dependencies {
     implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
 
     implementation("com.google.firebase:firebase-storage-ktx")
+
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
 
 
