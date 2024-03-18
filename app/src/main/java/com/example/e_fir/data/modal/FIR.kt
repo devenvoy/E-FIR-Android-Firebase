@@ -1,6 +1,7 @@
 package com.example.e_fir.data.modal
 
 data class FIR(
+    var ID: String,
     var name: String,
     var number: String,
     var email: String,
@@ -16,5 +17,7 @@ data class FIR(
     var firContent: String,
     var signImg: String,
     var registerDate: String,
-    var status: String
-)
+    var status: String = "Pending"
+) {
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+}

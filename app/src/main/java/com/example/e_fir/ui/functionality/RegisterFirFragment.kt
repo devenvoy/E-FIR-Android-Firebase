@@ -117,7 +117,10 @@ class RegisterFirFragment : Fragment() {
 
                 val today = LocalDate.now()
 
+                val key = myDBRef.key
+
                 val fir = FIR(
+                    ID = key!!,
                     name = name,
                     number = number,
                     email = email,
