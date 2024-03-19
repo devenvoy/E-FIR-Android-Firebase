@@ -2,18 +2,19 @@ package com.example.e_fir.ui.home
 
 import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.example.e_fir.R
 import com.example.e_fir.data.adapter.MyNodeAdapter
 import com.example.e_fir.data.modal.PageNode
 import com.example.e_fir.data.modal.SubPageNode
 import com.example.e_fir.databinding.ActivityHomePageBinding
+import com.example.e_fir.ui.Activity.EmergencyNumActivity
 import com.example.e_fir.ui.splash.SplashScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -33,13 +34,6 @@ class HomePage : AppCompatActivity() {
         AnimationUtils.loadAnimation(this, R.anim.to_bottom_fab)
     }
 
-    private val rotateClockWiseAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.rotate_clock_wise)
-    }
-
-    private val rotateAntiClockWiseAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.rotate_anti_clock_wise)
-    }
 
     val mainList = arrayOf(
         PageNode(
@@ -174,7 +168,25 @@ class HomePage : AppCompatActivity() {
                     }
                     builder.show()
                 }
+
+                R.id.user_profile -> {
+                    //TODO -do something
+                }
+
+                R.id.home -> {
+                    //TODO -do something
+                }
+
+                R.id.emergencyNum -> {
+                    startActivity(Intent(this@HomePage, EmergencyNumActivity::class.java))
+                }
+
+                R.id.unistallApps -> {
+                    //TODO -do something
+                }
+
             }
+
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
         }

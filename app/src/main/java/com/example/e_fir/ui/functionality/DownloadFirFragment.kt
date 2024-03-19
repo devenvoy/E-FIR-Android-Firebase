@@ -35,31 +35,30 @@ class DownloadFirFragment : Fragment() {
         .getReference()
         .child("FIR/Data/${cUser!!.uid}")
 
-    var options: FirebaseRecyclerOptions<FIR> = FirebaseRecyclerOptions.Builder<FIR>()
+    var options: FirebaseRecyclerOptions<FIR?> = FirebaseRecyclerOptions.Builder<FIR>()
         .setQuery(query, FIR::class.java)
         .build()
 
-    var adapter: FirebaseRecyclerAdapter<*, *> =
-        object : FirebaseRecyclerAdapter<FIR, FirHolder?>(this.options) {
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FirHolder {
-                val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.fir_item, parent, false)
-                return FirHolder(view)
-            }
+    var adapter = object : FirebaseRecyclerAdapter<FIR, FirHolder?>(this.options) {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FirHolder {
+            val view: View = LayoutInflater.from(parent.context)
+                .inflate(R.layout.fir_item, parent, false)
+            return FirHolder(view)
+        }
 
-            override fun onBindViewHolder(holder: FirHolder, position: Int, model: FIR) {
-                holder.txtid.text = model.ID
-                holder.txtName.text = model.name
-                holder.txtComplaint.text = model.complaint
-                holder.txtDate.text = model.registerDate
-                holder.txtStatus.text = model.status
-                when (model.status) {
-                    "Pending" -> holder.txtStatus.setTextColor(resources.getColor(R.color.red))
-                    "Accepted" -> holder.txtStatus.setTextColor(resources.getColor(R.color.green))
-                    "Completed" -> holder.txtStatus.setTextColor(resources.getColor(R.color.blue))
-                }
+        override fun onBindViewHolder(holder: FirHolder, position: Int, model: FIR) {
+            holder.txtid.text = model.ID
+            holder.txtName.text = model.name
+            holder.txtComplaint.text = model.complaint
+            holder.txtDate.text = model.registerDate
+            holder.txtStatus.text = model.status
+            when (model.status) {
+                "Pending" -> holder.txtStatus.setTextColor(resources.getColor(R.color.red))
+                "Accepted" -> holder.txtStatus.setTextColor(resources.getColor(R.color.green))
+                "Completed" -> holder.txtStatus.setTextColor(resources.getColor(R.color.blue))
             }
         }
+    }
 
     class FirHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -103,28 +102,49 @@ class DownloadFirFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.startDate.setText(getCurrentDate().toString())
+
         binding.endDate.setText(getCurrentDate().toString())
 
         binding.startDate.setOnClickListener {
             showDatePickerDialog(requireActivity(), binding.startDate)
-            changeFirList()
         }
 
         binding.endDate.setOnClickListener {
             showDatePickerDialog(requireActivity(), binding.endDate)
-            changeFirList()
         }
 
+        binding.firRecyclerView.adapter = adapter
+        changeFirList()
 
     }
 
 
     private fun changeFirList() {
 
+        val sDate = binding.startDate.text.toString()
+        val eDate = binding.endDate.text.toString()
+
+        query = FirebaseDatabase.getInstance()
+            .getReference()
+            .child("FIR/Data/${cUser!!.uid}")
+            .orderByChild("registerDate")
+            .startAt(sDate)
+            .endAt(eDate)
+
+
+        options = FirebaseRecyclerOptions.Builder<FIR>()
+            .setQuery(query, FIR::class.java)
+            .build()
+
+
+        adapter.updateOptions(options)
+        adapter.notifyDataSetChanged()
+
+
     }
 
 
-    fun getCurrentDate(): LocalDate {
+    private fun getCurrentDate(): LocalDate {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDate.now()
         } else {
@@ -143,9 +163,11 @@ class DownloadFirFragment : Fragment() {
         val datePickerDialog =
             DatePickerDialog(context, { _, selectedYear, selectedMonth, selectedDay ->
                 // Update the EditText with the selected date
-                val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
-                if (selectedDate < getCurrentDate()) {
-                    editText.setText(selectedDate.toString())
+                val selectedDate =
+                    LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
+                if ((selectedDate <= getCurrentDate().toString()) || (selectedDate <= binding.endDate.text.toString())) {
+                    editText.setText(selectedDate)
+                    changeFirList()
                 } else {
                     Toast.makeText(activity, "This Date Can't Be selected Now", Toast.LENGTH_SHORT)
                         .show()

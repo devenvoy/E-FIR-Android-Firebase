@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.splash.SplashScreen">
+    tools:context=".ui.splash.SplashScreen"
+    tools:openDrawer="start">
 
 
     <RelativeLayout
@@ -63,7 +64,6 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="24dp"
             android:src="@drawable/c112"
-            android:visibility="invisible"
             app:backgroundTint="@color/secondPrimary"
             app:fabCustomSize="50dp"
             app:fabSize="mini"

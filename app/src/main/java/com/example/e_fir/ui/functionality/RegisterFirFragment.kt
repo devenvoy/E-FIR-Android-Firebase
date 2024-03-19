@@ -84,7 +84,10 @@ class RegisterFirFragment : Fragment() {
 
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, stateList)
         binding.state.setAdapter(stateAdapter)
-        val complaintAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, complaintList)
+
+        val compList = complaintList.map { it.HEAD }
+        val complaintAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_item, compList)
         binding.compNature.setAdapter(complaintAdapter)
 
         val psAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, suratpolicestnList)
@@ -136,13 +139,13 @@ class RegisterFirFragment : Fragment() {
                     firContent = firDesc,
                     signImg = imageUrl,
                     registerDate = today.toString(),
-                    status = "PENDING"
+                    status = "Pending",
                 )
 
                 myDBRef.setValue(fir)
 
                 showToast("Success")
-                requireActivity().finish()
+                //requireActivity().finish()
             } else {
                 showToast("Fill Form Properly")
             }
@@ -254,6 +257,11 @@ class RegisterFirFragment : Fragment() {
 
             subComplaintType.isEmpty() -> {
                 showToast("Select Sub Complaint Type")
+                false
+            }
+
+            imageUrl.isEmpty() -> {
+                showToast("Upload Your signature image")
                 false
             }
 

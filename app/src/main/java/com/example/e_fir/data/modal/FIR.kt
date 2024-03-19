@@ -17,7 +17,7 @@ data class FIR(
     var firContent: String,
     var signImg: String,
     var registerDate: String,
-    var status: String = "Pending"
+    var status: String = "Pending",
 ) {
     constructor() : this("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 }
