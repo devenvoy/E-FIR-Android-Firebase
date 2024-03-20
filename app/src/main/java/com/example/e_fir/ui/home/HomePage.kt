@@ -2,7 +2,9 @@ package com.example.e_fir.ui.home
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
@@ -150,6 +152,10 @@ class HomePage : AppCompatActivity() {
             }
         }
 
+        binding.subFab.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:112")))
+        }
+
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.logout -> {
@@ -195,14 +201,28 @@ class HomePage : AppCompatActivity() {
 
     private fun expandFab() {
         isExpanded = !isExpanded
-//        binding.mainFab.startAnimation(rotateClockWiseAnim)
-        binding.subFab.startAnimation(toBottomFabAnim)
+
+        binding.subFab.animate()
+            .translationY(binding.subFab.height * -1.5f)
+            .withStartAction {
+                binding.subFab.visibility = View.VISIBLE
+            }
+            .setDuration(500)
+/*//        binding.mainFab.startAnimation(rotateClockWiseAnim)
+        binding.subFab.startAnimation(toBottomFabAnim)*/
     }
 
     private fun shrinkFab() {
         isExpanded = !isExpanded
-//        binding.mainFab.startAnimation(rotateAntiClockWiseAnim)
+        binding.subFab.animate()
+            .translationY(0f)
+            .withEndAction {
+                binding.subFab.visibility = View.GONE
+            }
+            .setDuration(500)
+        /*//        binding.mainFab.startAnimation(rotateAntiClockWiseAnim)
         binding.subFab.startAnimation(fromBottomFabAnim)
+        binding.subFab.visibility = View.GONE*/
     }
 
     // New Method Instead of Using onBackPressed

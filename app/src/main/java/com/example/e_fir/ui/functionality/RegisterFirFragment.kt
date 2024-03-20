@@ -61,7 +61,7 @@ class RegisterFirFragment : Fragment() {
     lateinit var firDesc: String
     lateinit var policStation: String
 
-    lateinit var imageUrl: String
+    var imageUrl: String =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -142,10 +142,13 @@ class RegisterFirFragment : Fragment() {
                     status = "Pending",
                 )
 
-                myDBRef.setValue(fir)
+                myDBRef.setValue(fir).addOnSuccessListener {
+                    showToast("FIR Submitted")
+                    requireActivity().finish()
+                }.addOnFailureListener {
+                    showToast("Something Went Wrong")
+                }
 
-                showToast("Success")
-                //requireActivity().finish()
             } else {
                 showToast("Fill Form Properly")
             }
@@ -184,10 +187,6 @@ class RegisterFirFragment : Fragment() {
         policStation = binding.policestn.text.toString()
         firDesc = binding.firContent.text.toString()
 
-        Log.e(
-            "====",
-            "validateForm: \n$name \n$email \n$number \n$age \n$gender \n$fname \n$pAddress \n$state \n$district \n$complaintType \n$subComplaintType \n$policStation \n$firDesc"
-        )
 
         return when {
             name.isEmpty() -> {
@@ -314,7 +313,7 @@ class RegisterFirFragment : Fragment() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     imageUrl = downloadUri.toString()
-                    Log.e("====", "submit: $imageUrl")
+                    showToast("Image Taken ")
                 }
 
             }

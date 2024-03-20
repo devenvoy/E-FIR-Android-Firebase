@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.splash.SplashScreen"
-    tools:openDrawer="start">
+    tools:context=".ui.splash.SplashScreen">
 
 
     <RelativeLayout
@@ -42,6 +41,22 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/main_item" />
 
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/subFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/mainFab"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="24dp"
+            android:src="@drawable/c112"
+            app:backgroundTint="@color/secondPrimary"
+            app:fabCustomSize="50dp"
+            app:fabSize="mini"
+            app:tint="@color/ColorPrimary" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/mainFab"
             android:layout_width="wrap_content"
@@ -53,20 +68,6 @@
             android:src="@drawable/sos"
             app:backgroundTint="@color/secondPrimary"
             app:fabSize="normal"
-            app:tint="@color/ColorPrimary" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/subFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/mainFab"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/c112"
-            app:backgroundTint="@color/secondPrimary"
-            app:fabCustomSize="50dp"
-            app:fabSize="mini"
             app:tint="@color/ColorPrimary" />
 
     </RelativeLayout>
