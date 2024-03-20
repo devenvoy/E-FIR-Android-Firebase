@@ -24,14 +24,19 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        // initialize auth instance
         auth = Firebase.auth
 
+        // room database object
         val dbhelper = StatesDbHandler.getDb(this@SplashScreen)
 
+        // get from db and initialize state list
         stateList = dbhelper.statesDao.getAllStateData()
 
+        // get from db and initialize complaint list
         complaintList = dbhelper.statesDao.getComplaints()
 
+        // splash screen method
         Handler(Looper.getMainLooper()).postDelayed({
             if (auth.currentUser == null) {
                 startActivity(Intent(this@SplashScreen, SignIn::class.java))
@@ -43,4 +48,6 @@ class SplashScreen : AppCompatActivity() {
         }, 2000)
 
     }
+
+
 }

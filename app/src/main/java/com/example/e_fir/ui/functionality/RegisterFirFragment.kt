@@ -75,30 +75,43 @@ class RegisterFirFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // initialized all firebase instances
         auth = Firebase.auth
         storage = Firebase.storage
         database = Firebase.database
+        // get current user data object
         currentUser = auth.currentUser!!
 
+        // room database object
         val db = StatesDbHandler.getDb(requireActivity())
-
+        // State drop down adapter
         val stateAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, stateList)
+        //  set adapter to create state drop down
         binding.state.setAdapter(stateAdapter)
 
+        // complaints drop down adapter
         val compList = complaintList.map { it.HEAD }
         val complaintAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_item, compList)
+        // set adapter to create complaint drop down
         binding.compNature.setAdapter(complaintAdapter)
 
+        // police station drop down adapter
         val psAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, suratpolicestnList)
+        // set adapter to create police station list drop down
         binding.policestn.setAdapter(psAdapter)
 
+        // District drop down adapter
         var districtAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, districtList)
+        // set adapter to create District list drop down
         binding.district.setAdapter(districtAdapter)
 
+        // Sub Complaint drop down adapter
         var subComAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, subComplaintList)
+        // set adapter to create Sub Complaint list drop down
         binding.subcompNature.setAdapter(subComAdapter)
 
+        // Change District List according to state Selected
         binding.state.setOnItemClickListener { parent, view, position, id ->
             districtList = db.statesDao.getDistrictData(stateList[position])
             districtAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, districtList)
@@ -106,6 +119,7 @@ class RegisterFirFragment : Fragment() {
             binding.district.text.clear()
         }
 
+        // Change sub complaint list according to main Complaint selected
         binding.compNature.setOnItemClickListener { parent, view, position, id ->
             subComplaintList = db.statesDao.getsubComplaints(complaintList[position].C_ID)
             subComAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, subComplaintList)
@@ -113,15 +127,21 @@ class RegisterFirFragment : Fragment() {
             binding.subcompNature.text.clear()
         }
 
+        // Action to perform on submit button click
         binding.btnSubmit.setOnClickListener {
+            // validate form
             if (validateForm()) {
 
+                // data reference path to store object
                 val myDBRef = database.getReference("FIR/Data/${currentUser.uid}").push()
 
+                // today  date
                 val today = LocalDate.now()
 
+                // new stored object key
                 val key = myDBRef.key
 
+                // fir object with data
                 val fir = FIR(
                     ID = key!!,
                     name = name,
@@ -142,9 +162,11 @@ class RegisterFirFragment : Fragment() {
                     status = "Pending",
                 )
 
+                // if object is stored / submitted than close page
                 myDBRef.setValue(fir).addOnSuccessListener {
                     showToast("FIR Submitted")
                     requireActivity().finish()
+                    // else error message
                 }.addOnFailureListener {
                     showToast("Something Went Wrong")
                 }
@@ -154,6 +176,7 @@ class RegisterFirFragment : Fragment() {
             }
         }
 
+        // take image from user device
         binding.upldSign.setOnClickListener {
             selectImageLauncher.launch("image/*")
         }
@@ -161,6 +184,7 @@ class RegisterFirFragment : Fragment() {
     }
 
 
+    // take image from user device and upload result to firebase storage
     private val selectImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
@@ -169,6 +193,8 @@ class RegisterFirFragment : Fragment() {
         }
 
 
+
+    // function to validate form
     private fun validateForm(): Boolean {
         resetError()
         name = binding.name.text.toString()
@@ -271,6 +297,7 @@ class RegisterFirFragment : Fragment() {
 
     }
 
+    // clear form fields
     private fun resetError() {
         binding.namel.error = ""
         binding.numberl.error = ""
@@ -282,13 +309,15 @@ class RegisterFirFragment : Fragment() {
     }
 
 
+    // function to show toast message
     private fun showToast(msg: String) {
         Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
     }
 
+    // function to store image in firebase database
     private fun uploadImageToFirebaseStorage(uri: Uri) {
 
-
+        // convert image to bytes array
         val contentResolver = requireContext().contentResolver
         val imageBytes = uri.toBytes(contentResolver)
 
@@ -311,6 +340,8 @@ class RegisterFirFragment : Fragment() {
             }.addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
+
+                    // uploaded image url
                     val downloadUri = task.result
                     imageUrl = downloadUri.toString()
                     showToast("Image Taken ")
@@ -327,6 +358,7 @@ class RegisterFirFragment : Fragment() {
     }
 
 
+    // function to convert image into bytes array and return it
     fun Uri.toBytes(contentResolver: ContentResolver): ByteArray {
         val inputStream: InputStream? = contentResolver.openInputStream(this)
         val byteBuffer = ByteArrayOutputStream()

@@ -31,14 +31,17 @@ class DownloadFirFragment : Fragment() {
     private val auth = Firebase.auth
     private val cUser = auth.currentUser
 
+    // query path to get all object from database
     var query: Query = FirebaseDatabase.getInstance()
         .getReference()
         .child("FIR/Data/${cUser!!.uid}")
 
+    //
     var options: FirebaseRecyclerOptions<FIR?> = FirebaseRecyclerOptions.Builder<FIR>()
         .setQuery(query, FIR::class.java)
         .build()
 
+    // adapter to fill recyler view
     var adapter = object : FirebaseRecyclerAdapter<FIR, FirHolder?>(this.options) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FirHolder {
             val view: View = LayoutInflater.from(parent.context)
@@ -78,11 +81,13 @@ class DownloadFirFragment : Fragment() {
     }
 
 
+    // start  adapter when fragment start
     override fun onStart() {
         super.onStart()
         adapter.startListening()
     }
 
+    // stop adapter when exit from fragment
     override fun onDestroy() {
         super.onDestroy()
         adapter.stopListening()
@@ -119,6 +124,7 @@ class DownloadFirFragment : Fragment() {
     }
 
 
+    // update fir list  when date changed
     private fun changeFirList() {
 
         val sDate = binding.startDate.text.toString()
@@ -165,7 +171,7 @@ class DownloadFirFragment : Fragment() {
                 // Update the EditText with the selected date
                 val selectedDate =
                     LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
-                if ((selectedDate <= getCurrentDate().toString()) || (selectedDate <= binding.endDate.text.toString())) {
+                if ((selectedDate <= getCurrentDate().toString()) || (binding.startDate.text.toString() <= binding.endDate.text.toString())) {
                     editText.setText(selectedDate)
                     changeFirList()
                 } else {

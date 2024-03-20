@@ -26,17 +26,10 @@ class HomePage : AppCompatActivity() {
 
     var isExpanded = false
 
+    // Firebase auth
     lateinit var auth: FirebaseAuth
 
-    private val fromBottomFabAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.from_bottom_fab)
-    }
-
-    private val toBottomFabAnim: Animation by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.to_bottom_fab)
-    }
-
-
+    // page Category and sub category items list
     val mainList = arrayOf(
         PageNode(
             "FIR", R.drawable.ic_fir_node, "",
@@ -119,6 +112,7 @@ class HomePage : AppCompatActivity() {
         )
     )
 
+    // this page binding
     private val binding: ActivityHomePageBinding by lazy {
         ActivityHomePageBinding.inflate(layoutInflater)
     }
@@ -126,24 +120,33 @@ class HomePage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         // on functionality onBackPressed
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
+        // initialize auth
         auth = Firebase.auth
 
+        // main page category adapter
         val myNodeAdapter = MyNodeAdapter(this@HomePage, mainList)
+        // set adapter
         binding.mainRecyclerView.adapter = myNodeAdapter
 
+        // toggle action for drawer icon
         val toggleButton =
             ActionBarDrawerToggle(
                 this, binding.drawerLayout, binding.toolbar,
                 R.string.open,
                 R.string.close
             )
+        // toggle icon color
         toggleButton.drawerArrowDrawable.color = getResources().getColor(R.color.white)
+        // add toggle button to action bar / tool bar
         binding.drawerLayout.addDrawerListener(toggleButton)
+        // sync with navigationview
         toggleButton.syncState()
 
+        // main Floating action button
         binding.mainFab.setOnClickListener {
             if (isExpanded) {
                 shrinkFab()
@@ -152,10 +155,12 @@ class HomePage : AppCompatActivity() {
             }
         }
 
+        // action on sub floating action button
         binding.subFab.setOnClickListener {
             startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:112")))
         }
 
+        // Navigation view menu item selected
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.logout -> {
@@ -192,26 +197,25 @@ class HomePage : AppCompatActivity() {
                 }
 
             }
-
+            // close navigation drawer
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
     }
 
+    // if close sub fab icon then open
     private fun expandFab() {
         isExpanded = !isExpanded
-
         binding.subFab.animate()
             .translationY(binding.subFab.height * -1.5f)
             .withStartAction {
                 binding.subFab.visibility = View.VISIBLE
             }
             .setDuration(500)
-/*//        binding.mainFab.startAnimation(rotateClockWiseAnim)
-        binding.subFab.startAnimation(toBottomFabAnim)*/
     }
 
+    // if open sub fab icon then close
     private fun shrinkFab() {
         isExpanded = !isExpanded
         binding.subFab.animate()
@@ -220,12 +224,9 @@ class HomePage : AppCompatActivity() {
                 binding.subFab.visibility = View.GONE
             }
             .setDuration(500)
-        /*//        binding.mainFab.startAnimation(rotateAntiClockWiseAnim)
-        binding.subFab.startAnimation(fromBottomFabAnim)
-        binding.subFab.visibility = View.GONE*/
     }
 
-    // New Method Instead of Using onBackPressed
+    // New Method Instead of Using onBackPressed old deprecated function
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -17,6 +17,7 @@ class EmergencyNumActivity : AppCompatActivity() {
         ActivityEmergencyNumBinding.inflate(layoutInflater)
     }
 
+    // emergency number data class
     data class EmergencyNum(
         val name: String,
         val number: Int,
@@ -24,6 +25,7 @@ class EmergencyNumActivity : AppCompatActivity() {
     )
 
 
+    // emergency number list
     val eNumList = listOf(
         EmergencyNum("Police", 100, R.drawable.e100),
         EmergencyNum("Fire Brigade", 101, R.drawable.e101),
@@ -49,9 +51,12 @@ class EmergencyNumActivity : AppCompatActivity() {
         }
 
 
+        // emergency number adapter
         val eAdapter = MyEmegencyAdapter(this@EmergencyNumActivity, eNumList)
 
+        // set emergency number adapter
         binding.eNumList.adapter = eAdapter
+
 
         binding.eNumList.setOnItemClickListener { parent, view, position, id ->
 
