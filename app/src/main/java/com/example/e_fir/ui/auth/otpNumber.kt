@@ -1,6 +1,10 @@
 package com.example.e_fir.ui.auth
 
+import android.annotation.SuppressLint
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -9,8 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.e_fir.ui.home.HomePage
+import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentOtpNumberBinding
+import com.example.e_fir.ui.Activity.ProfileActivity
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -21,6 +26,9 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 import `in`.aabhasjindal.otptextview.OTPListener
 import java.util.concurrent.TimeUnit
 
@@ -37,6 +45,8 @@ class otpNumber : Fragment() {
     private lateinit var binding: FragmentOtpNumberBinding
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private lateinit var myRef: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +62,9 @@ class otpNumber : Fragment() {
 
         // auth instance
         auth = Firebase.auth
+        database = Firebase.database
+        myRef = database.getReference()
+
 
         // get phone number from fragment argument
         phonenumber = arguments?.getString("phonenumber").toString()
@@ -93,9 +106,10 @@ class otpNumber : Fragment() {
 
     // timer counter function
     fun resendTextCounter() {
-        binding.resendOtp.isEnabled = false
 
+        binding.resendOtp.isEnabled = false
         object : CountDownTimer(60000, 1000) {
+            @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 binding.resendOtp.text = "Resend In :  ${millisUntilFinished / 1000}s"
             }
@@ -192,8 +206,10 @@ class otpNumber : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("==", "signInWithCredential:success")
-                    requireActivity().startActivity(Intent(activity, HomePage::class.java))
-                    val user = task.result?.user
+//
+                    startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+                    requireActivity().finish()
+
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w("==", "signInWithCredential:failure", task.exception)
@@ -203,6 +219,10 @@ class otpNumber : Fragment() {
                     // Update UI
                 }
             }
+    }
+
+    private fun showToast(s: String) {
+        Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show()
     }
 
 

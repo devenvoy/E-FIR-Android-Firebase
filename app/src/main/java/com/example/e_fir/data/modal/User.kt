@@ -22,6 +22,6 @@ data class User(
     var IDPROOFNUM: String,
     var filled: Boolean,
 ) {
-    constructor() : this("", "", "", "", "", "", "", "", "", "", "", "", "", "", filled = false)
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "", "https://firebasestorage.googleapis.com/v0/b/e-fir-434f7.appspot.com/o/Users%2Fuser.jpeg?alt=media&token=31579f13-6e85-49e1-85d2-035c7c4965f4", "", "", filled = false)
 }
 

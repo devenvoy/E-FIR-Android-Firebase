@@ -1,5 +1,6 @@
 package com.example.e_fir.ui.Activity
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -12,10 +13,12 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.e_fir.R
 import com.example.e_fir.data.constants
 import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.ActivityProfileBinding
+import com.example.e_fir.ui.home.HomePage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -26,7 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
-import java.io.File
+import java.util.UUID
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -75,6 +78,34 @@ class ProfileActivity : AppCompatActivity() {
         sharedPref = getSharedPreferences("USER_DATA", MODE_PRIVATE)
         editor = sharedPref.edit()
 
+        val json = sharedPref.getString("user",null)
+        var user = Gson().fromJson(json, User::class.java)
+
+        if (user == null){
+            user = User()
+        }
+
+        Glide.with(this@ProfileActivity).load(user.userDp).into(binding.profileImage)
+        binding.name.setText(user.NAME)
+        binding.number.setText(user.NUMBER)
+        binding.email.setText(user.EMAIL)
+        binding.age.setText(user.AGE)
+        binding.country.setText(user.COUNTRY)
+        binding.citizen.setText(user.CITIZENSHIP)
+        binding.state.setText(user.STATE)
+        binding.pincode.setText(user.PINCODE)
+        binding.address.setText(user.ADDRESS)
+        binding.idProofType.setText(user.IDPROOFTYPE)
+        binding.idNum.setText(user.IDPROOFNUM)
+        imageUrl = user.userDp
+
+        if (user.GENDER.equals("Female")) {
+            binding.rbtnmale.isChecked = true
+        } else if (user.GENDER.equals("TransGender")) {
+            binding.rbtntrans.isChecked = true
+        } else {
+            binding.rbtnmale.isChecked = true
+        }
 
         val stateAdapter =
             ArrayAdapter(this@ProfileActivity, R.layout.spinner_item, constants.stateList)
@@ -96,6 +127,9 @@ class ProfileActivity : AppCompatActivity() {
 
                 // data reference path to store object
                 val myDBRef = database.getReference("USERS/Data/${currentUser.uid}")
+
+
+                uploadImageToFirebaseStorage()
 
                 // fir object with data
                 val user = User(
@@ -123,6 +157,8 @@ class ProfileActivity : AppCompatActivity() {
                     val json = gson.toJson(user)
                     editor.putString("user", json)
                     editor.commit()
+                    startActivity(Intent(this@ProfileActivity, HomePage::class.java))
+                    finish()
                     // else error message
                 }.addOnFailureListener {
                     showToast("Something Went Wrong")
@@ -140,7 +176,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
 
         resetError()
-
         name = binding.name.text.toString()
         email = binding.email.text.toString()
         number = binding.number.text.toString()
@@ -251,13 +286,18 @@ class ProfileActivity : AppCompatActivity() {
         Toast.makeText(this@ProfileActivity, msg, Toast.LENGTH_SHORT).show()
     }
 
-    private fun uploadImageToFirebaseStorage(uri: Uri) {
+    private fun uploadImageToFirebaseStorage() {
 
-        val imageBytes = uri.toBytes()
+        binding.profileImage.isDrawingCacheEnabled = true
+        binding.profileImage.buildDrawingCache()
+        val bitmap = (binding.profileImage.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+        val imageBytes = baos.toByteArray()
 
         // Create a reference to the file in Firebase Storage
         val storageRef =
-            storage.reference.child("Users/${currentUser.uid}/${File(uri.path!!).name}")
+            storage.reference.child("Users/${currentUser.uid}/${generateRandomName()}")
 
         // Upload the file to Firebase Storage
         val uploadTask = storageRef.putBytes(imageBytes)
@@ -291,24 +331,19 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
-    // function to convert image into bytes array and return it
-    fun Uri.toBytes(): ByteArray {
-        binding.profileImage.isDrawingCacheEnabled = true
-        binding.profileImage.buildDrawingCache()
-        val bitmap = (binding.profileImage.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        return data
-    }
-
     private val selectImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 binding.profileImage.setImageURI(uri)
-                uploadImageToFirebaseStorage(it)
             }
         }
+
+
+    fun generateRandomName(): String {
+        val timestamp = System.currentTimeMillis()
+        val randomString = UUID.randomUUID().toString().substring(0, 8) // Generate a random string
+        return "$timestamp-$randomString.jpg" // Append ".jpg" at the end
+    }
 
     // clear form fields error
     private fun resetError() {

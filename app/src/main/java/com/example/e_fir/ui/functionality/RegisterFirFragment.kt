@@ -61,7 +61,7 @@ class RegisterFirFragment : Fragment() {
     lateinit var firDesc: String
     lateinit var policStation: String
 
-    var imageUrl: String =""
+    var imageUrl: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -176,6 +176,10 @@ class RegisterFirFragment : Fragment() {
             }
         }
 
+        binding.backArrow.setOnClickListener {
+            requireActivity().finish()
+        }
+
         // take image from user device
         binding.upldSign.setOnClickListener {
             selectImageLauncher.launch("image/*")
@@ -191,7 +195,6 @@ class RegisterFirFragment : Fragment() {
                 uploadImageToFirebaseStorage(it)
             }
         }
-
 
 
     // function to validate form
