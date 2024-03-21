@@ -52,6 +52,7 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("com.google.firebase:firebase-database-ktx:20.3.1")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+    implementation("androidx.activity:activity:1.8.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -62,6 +63,9 @@ dependencies {
 
     // lottie animation
     implementation("com.airbnb.android:lottie:6.4.0")
+
+    // circle imageview
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
 
     // Glide
@@ -85,6 +89,8 @@ dependencies {
 
 
     implementation ("com.firebaseui:firebase-ui-database:8.0.2")
+
+    implementation("com.google.code.gson:gson:2.10.1")
 
 
 

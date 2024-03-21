@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -102,9 +103,12 @@ class DownloadFirFragment : Fragment() {
         return binding.root
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        binding.backArrow.setOnClickListener {
+            requireActivity().finish()
+        }
 
         binding.startDate.setText(getCurrentDate().toString())
 

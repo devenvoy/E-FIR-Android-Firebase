@@ -297,7 +297,7 @@ class RegisterFirFragment : Fragment() {
 
     }
 
-    // clear form fields
+    // clear form fields error
     private fun resetError() {
         binding.namel.error = ""
         binding.numberl.error = ""

@@ -2,32 +2,46 @@ package com.example.e_fir.ui.home
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide
 import com.example.e_fir.R
 import com.example.e_fir.data.adapter.MyNodeAdapter
 import com.example.e_fir.data.modal.PageNode
 import com.example.e_fir.data.modal.SubPageNode
+import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.ActivityHomePageBinding
 import com.example.e_fir.ui.Activity.EmergencyNumActivity
+import com.example.e_fir.ui.Activity.showProfileActivity
 import com.example.e_fir.ui.splash.SplashScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 
 class HomePage : AppCompatActivity() {
 
     var isExpanded = false
 
+    lateinit var sharedPref: SharedPreferences
+    lateinit var editor: Editor
+    lateinit var user: User
+
     // Firebase auth
     lateinit var auth: FirebaseAuth
+
+    private lateinit var imageView: ImageView
+    private lateinit var userNumber: TextView
+    private lateinit var userName: TextView
 
     // page Category and sub category items list
     val mainList = arrayOf(
@@ -127,6 +141,9 @@ class HomePage : AppCompatActivity() {
         // initialize auth
         auth = Firebase.auth
 
+        sharedPref = getSharedPreferences("USER_DATA", MODE_PRIVATE)
+        editor = sharedPref.edit()
+
         // main page category adapter
         val myNodeAdapter = MyNodeAdapter(this@HomePage, mainList)
         // set adapter
@@ -160,6 +177,21 @@ class HomePage : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:112")))
         }
 
+        val headerView = binding.navView.getHeaderView(0)
+
+        imageView = headerView.findViewById(R.id.dp)
+        userName = headerView.findViewById(R.id.userName)
+        userNumber = headerView.findViewById(R.id.user_number)
+
+
+        val json = sharedPref.getString("user", null)
+        user = Gson().fromJson(json, User::class.java)
+
+
+        Glide.with(this).load(user.userDp).into(imageView)
+        userName.text = user.NAME
+        userNumber.text = user.NUMBER
+
         // Navigation view menu item selected
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -181,7 +213,7 @@ class HomePage : AppCompatActivity() {
                 }
 
                 R.id.user_profile -> {
-                    //TODO -do something
+                    startActivity(Intent(this@HomePage, showProfileActivity::class.java))
                 }
 
                 R.id.home -> {

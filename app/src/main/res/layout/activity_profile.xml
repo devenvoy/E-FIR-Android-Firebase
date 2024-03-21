@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Activity.ProfileActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txtView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Fill All Details \nBefore Using App"
+            android:textColor="@color/red"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@+id/txtView2"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="30dp"
+            android:src="@drawable/user"
+            android:tint="@color/black"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:id="@+id/txtView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image"
+            android:layout_marginTop="-20dp"
+            android:gravity="center"
+            android:text="Tap/Click on Image to select Image"
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/namel"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtView3"
+            android:hint="Name"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconDrawable="@drawable/person"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/numberl"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/namel"
+            android:hint="Number"
+            app:counterEnabled="true"
+            app:counterMaxLength="10"
+            app:counterTextColor="@color/ColorPrimary"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconDrawable="@drawable/baseline_phone_24"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLength="10" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emaill"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/numberl"
+            android:hint="Email"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconDrawable="@drawable/mail"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/agel"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emaill"
+            android:hint="Age"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconDrawable="@drawable/calendar"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLength="3" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/txtView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/agel"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center_vertical"
+            android:text="Gender"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:id="@+id/gendergroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtView1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtnmale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:backgroundTint="@color/ColorPrimary"
+                android:text="@string/male"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/rbtnfemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:backgroundTint="@color/ColorPrimary"
+                android:text="@string/female"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/rbtntrans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/ColorPrimary"
+                android:text="@string/trans"
+                android:textColor="@color/black" />
+
+        </RadioGroup>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/citizenl"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gendergroup"
+            android:hint="CitizenShip"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/citizen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/countryl"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/citizenl"
+            android:hint="Country"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/country"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/statel"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/countryl"
+            android:layout_marginBottom="10dp"
+            android:hint="State"
+            app:endIconTint="@color/ColorPrimary">
+
+            <AutoCompleteTextView
+                android:id="@+id/state"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pincodel"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/statel"
+            android:hint="Pincode"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pincode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLength="6" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addressl"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pincodel"
+            android:hint="Address"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconDrawable="@drawable/location_pin"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idProofTypel"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addressl"
+            android:layout_marginBottom="10dp"
+            android:hint="ID Proof Type"
+            app:endIconTint="@color/ColorPrimary">
+
+            <AutoCompleteTextView
+                android:id="@+id/idProofType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/idNuml"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idProofTypel"
+            android:hint="Id Proof Number"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/ColorPrimary"
+            app:helperText="Required*"
+            app:helperTextTextColor="@color/red"
+            app:startIconTint="@color/ColorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/idNum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <CheckBox
+            android:id="@+id/chk_terms_condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agree on All Terms And Conditions"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
+            android:layout_below="@+id/idNuml"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="60dp"
+            android:drawableStart="@drawable/add_a_photo"
+            android:drawableTint="@color/ColorPrimary"
+            android:padding="14dp"
+            android:text="Submit"
+            android:textSize="18sp"
+            android:layout_below="@+id/chk_terms_condition"
+            app:cornerRadius="14dp"
+            app:strokeColor="@color/ColorPrimary" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>
