@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentOtpNumberBinding
 import com.example.e_fir.ui.Activity.ProfileActivity
+import com.example.e_fir.ui.home.HomePage
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -206,10 +207,9 @@ class otpNumber : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("==", "signInWithCredential:success")
-//
-                    startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+                    requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
                     requireActivity().finish()
-
+                    val user = task.result?.user
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w("==", "signInWithCredential:failure", task.exception)
