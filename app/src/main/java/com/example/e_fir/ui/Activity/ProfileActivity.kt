@@ -78,12 +78,13 @@ class ProfileActivity : AppCompatActivity() {
         sharedPref = getSharedPreferences("USER_DATA", MODE_PRIVATE)
         editor = sharedPref.edit()
 
-        val json = sharedPref.getString("user",null)
+        val json = sharedPref.getString("user", null)
         var user = Gson().fromJson(json, User::class.java)
 
-        if (user == null){
+        if (user == null) {
             user = User()
         }
+        Log.e("====", user.toString())
 
         Glide.with(this@ProfileActivity).load(user.userDp).into(binding.profileImage)
         binding.name.setText(user.NAME)
@@ -128,8 +129,7 @@ class ProfileActivity : AppCompatActivity() {
                 // data reference path to store object
                 val myDBRef = database.getReference("USERS/Data/${currentUser.uid}")
 
-
-                uploadImageToFirebaseStorage()
+//                uploadImageToFirebaseStorage()
 
                 // fir object with data
                 val user = User(
@@ -188,7 +188,9 @@ class ProfileActivity : AppCompatActivity() {
         pincode = binding.pincode.text.toString()
         idprooftype = binding.idProofType.text.toString()
         idproofNum = binding.idNum.text.toString()
-        state = binding.state.text.toString()
+        state = if (binding.state.text.toString()
+                .isEmpty()
+        ) "Gujarat" else binding.state.text.toString()
 
 
         return when {
@@ -335,6 +337,7 @@ class ProfileActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 binding.profileImage.setImageURI(uri)
+                uploadImageToFirebaseStorage()
             }
         }
 

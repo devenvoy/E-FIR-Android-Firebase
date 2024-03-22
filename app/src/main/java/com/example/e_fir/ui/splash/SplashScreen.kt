@@ -32,6 +32,7 @@ class SplashScreen : AppCompatActivity() {
     lateinit var editor: Editor
     var user: User = User()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -40,7 +41,6 @@ class SplashScreen : AppCompatActivity() {
         auth = Firebase.auth
         database = Firebase.database
         val dbRef = database.getReference()
-
 
         sharedPref = getSharedPreferences("USER_DATA", MODE_PRIVATE)
         editor = sharedPref.edit()
@@ -62,7 +62,6 @@ class SplashScreen : AppCompatActivity() {
 
                 startActivity(Intent(this@SplashScreen, SignIn::class.java))
                 finish()
-
 
             } else {
 
@@ -103,8 +102,6 @@ class SplashScreen : AppCompatActivity() {
                         Log.e("firebase", "Error getting data", exception)
                     }
 
-
-
                 if (!user.filled) {
                     startActivity(Intent(this@SplashScreen, ProfileActivity::class.java))
                     finish()
@@ -114,8 +111,5 @@ class SplashScreen : AppCompatActivity() {
                 }
             }
         }, 2000)
-
     }
-
-
 }

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.cli.jvm.main
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -8,6 +10,7 @@ plugins {
 android {
     namespace = "com.example.e_fir"
     compileSdk = 34
+
 
     defaultConfig {
         applicationId = "com.example.e_fir"

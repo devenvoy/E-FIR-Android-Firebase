@@ -1,10 +1,7 @@
 package com.example.e_fir.ui.auth
 
 import android.annotation.SuppressLint
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -13,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentOtpNumberBinding
 import com.example.e_fir.ui.Activity.ProfileActivity
-import com.example.e_fir.ui.home.HomePage
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -32,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
 import `in`.aabhasjindal.otptextview.OTPListener
 import java.util.concurrent.TimeUnit
+import kotlin.math.log
 
 
 class otpNumber : Fragment() {
@@ -89,7 +85,6 @@ class otpNumber : Fragment() {
 
         // Verify Otp Button
         binding.btnVerifyOtp.setOnClickListener {
-
             // get Otp from View
             val otp = binding.otpView.otp
             // create credential with verification id
@@ -109,7 +104,7 @@ class otpNumber : Fragment() {
     fun resendTextCounter() {
 
         binding.resendOtp.isEnabled = false
-        object : CountDownTimer(60000, 1000) {
+        val timew = object : CountDownTimer(60000, 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 binding.resendOtp.text = "Resend In :  ${millisUntilFinished / 1000}s"
@@ -137,6 +132,7 @@ class otpNumber : Fragment() {
             optionsBuilder.setForceResendingToken(token) // callback's ForceResendingToken
         }
         PhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build())
+        Log.e("====", "resendVerificationCode", )
     }
 
 
@@ -151,10 +147,9 @@ class otpNumber : Fragment() {
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.e("====", "onVerificationCompleted:$credential2")
-
-
             // store credential
             credential = credential2
+            signInWithPhoneAuthCredential(credential)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
@@ -186,6 +181,8 @@ class otpNumber : Fragment() {
             // store this data for later use
             verificationId = p0
             token = p1
+            Log.e("====", "$p0    $p1")
+            Log.e("====", "$verificationId    $token")
         }
     }
 
@@ -206,13 +203,13 @@ class otpNumber : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("==", "signInWithCredential:success")
+                    Log.d("====", "signInWithCredential:success")
                     requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
                     requireActivity().finish()
                     val user = task.result?.user
                 } else {
                     // Sign in failed, display a message and update the UI
-                    Log.w("==", "signInWithCredential:failure", task.exception)
+                    Log.w("====", "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
                     }
@@ -220,10 +217,5 @@ class otpNumber : Fragment() {
                 }
             }
     }
-
-    private fun showToast(s: String) {
-        Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show()
-    }
-
 
 }

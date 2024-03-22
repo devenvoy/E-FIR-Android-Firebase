@@ -187,6 +187,10 @@ class HomePage : AppCompatActivity() {
         val json = sharedPref.getString("user", null)
         user = Gson().fromJson(json, User::class.java)
 
+//        if(user == null){
+//            user = User()
+//        }
+
 
         Glide.with(this).load(user.userDp).into(imageView)
         userName.text = user.NAME
@@ -202,6 +206,7 @@ class HomePage : AppCompatActivity() {
 
                     builder.setPositiveButton("Yes") { dialog, which ->
                         auth.signOut()
+                        sharedPref.edit().clear().commit()
                         startActivity(Intent(this@HomePage, SplashScreen::class.java))
                         finish()
                     }
