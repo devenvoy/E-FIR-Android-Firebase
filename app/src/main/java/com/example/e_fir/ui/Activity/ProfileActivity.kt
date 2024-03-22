@@ -184,7 +184,7 @@ class ProfileActivity : AppCompatActivity() {
         gender = rbtn.text.toString()
         address = binding.address.text.toString()
         citizen = binding.citizen.text.toString()
-        country = binding.citizen.text.toString()
+        country = binding.country.text.toString()
         pincode = binding.pincode.text.toString()
         idprooftype = binding.idProofType.text.toString()
         idproofNum = binding.idNum.text.toString()

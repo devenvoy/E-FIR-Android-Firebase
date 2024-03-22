@@ -1,6 +1,7 @@
 package com.example.e_fir.ui.functionality
 
 import android.content.ContentResolver
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.e_fir.R
 import com.example.e_fir.data.Singletons.StatesDbHandler
@@ -23,6 +25,7 @@ import com.example.e_fir.data.constants.Companion.stateList
 import com.example.e_fir.data.constants.Companion.subComplaintList
 import com.example.e_fir.data.constants.Companion.suratpolicestnList
 import com.example.e_fir.data.modal.FIR
+import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentRegisterFirBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -32,6 +35,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
@@ -63,6 +67,11 @@ class RegisterFirFragment : Fragment() {
 
     var imageUrl: String = ""
 
+
+    lateinit var sharedPref: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
+    lateinit var user: User
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,6 +90,26 @@ class RegisterFirFragment : Fragment() {
         database = Firebase.database
         // get current user data object
         currentUser = auth.currentUser!!
+
+        sharedPref =
+            requireActivity().getSharedPreferences("USER_DATA", AppCompatActivity.MODE_PRIVATE)
+        editor = sharedPref.edit()
+
+
+        val json = sharedPref.getString("user", null)
+        user = Gson().fromJson(json, User::class.java)
+
+        binding.rbtnself.isChecked = true
+        basicState(true)
+
+        binding.ctypegroup.setOnCheckedChangeListener { group, checkedId ->
+            val rbtn: RadioButton = requireActivity().findViewById(checkedId)
+            if (rbtn.id == R.id.rbtnself) {
+                basicState(true)
+            } else {
+                basicState(false)
+            }
+        }
 
         // room database object
         val db = StatesDbHandler.getDb(requireActivity())
@@ -375,6 +404,59 @@ class RegisterFirFragment : Fragment() {
         }
 
         return byteBuffer.toByteArray()
+    }
+
+    fun basicState(self: Boolean) {
+        if (self) {
+            binding.name.apply {
+                setText(user.NAME)
+                isEnabled = false
+            }
+
+            binding.number.apply {
+                setText(user.NUMBER)
+                isEnabled = false
+            }
+
+            binding.email.apply {
+                setText(user.EMAIL)
+                isEnabled = false
+            }
+
+            binding.age.apply {
+                setText(user.AGE)
+                isEnabled = false
+            }
+
+            if (user.GENDER.equals("Female")) {
+                binding.rbtnmale.isChecked = true
+            } else if (user.GENDER.equals("TransGender")) {
+                binding.rbtntrans.isChecked = true
+            } else {
+                binding.rbtnmale.isChecked = true
+            }
+        } else {
+            binding.name.apply {
+                requestFocus()
+                text!!.clear()
+                isEnabled = true
+            }
+
+            binding.number.apply {
+                text!!.clear()
+                isEnabled = true
+            }
+
+            binding.email.apply {
+                text!!.clear()
+                isEnabled = true
+            }
+
+            binding.age.apply {
+                text!!.clear()
+                isEnabled = true
+            }
+        }
     }
 
 
