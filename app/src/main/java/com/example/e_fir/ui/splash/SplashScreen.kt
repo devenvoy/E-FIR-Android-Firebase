@@ -8,6 +8,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.HandlerCompat.postDelayed
+import androidx.core.os.postDelayed
 import com.example.e_fir.R
 import com.example.e_fir.data.Singletons.StatesDbHandler
 import com.example.e_fir.data.constants.Companion.complaintList
@@ -30,7 +32,7 @@ class SplashScreen : AppCompatActivity() {
 
     lateinit var sharedPref: SharedPreferences
     lateinit var editor: Editor
-    var user: User = User()
+    lateinit var user: User
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +57,6 @@ class SplashScreen : AppCompatActivity() {
         complaintList = dbhelper.statesDao.getComplaints()
 
 
-
         // splash screen method
         Handler(Looper.getMainLooper()).postDelayed({
             if (auth.currentUser == null) {
@@ -66,7 +67,6 @@ class SplashScreen : AppCompatActivity() {
             } else {
 
                 val currentUser = auth.currentUser!!
-
                 dbRef.child("USERS/Data/${currentUser.uid}").get()
                     .addOnSuccessListener { dataSnapshot ->
                         Log.e("firebase", "Got value ${dataSnapshot.value}")
@@ -95,6 +95,14 @@ class SplashScreen : AppCompatActivity() {
                             val json = gson.toJson(user)
                             editor.putString("user", json)
                             editor.commit()
+
+                            if (!user.filled) {
+                                startActivity(Intent(this@SplashScreen, ProfileActivity::class.java))
+                                finish()
+                            } else {
+                                startActivity(Intent(this@SplashScreen, HomePage::class.java))
+                                finish()
+                            }
                         } else {
                             Log.e("firebase", "User data is null")
                         }
@@ -102,13 +110,6 @@ class SplashScreen : AppCompatActivity() {
                         Log.e("firebase", "Error getting data", exception)
                     }
 
-                if (!user.filled) {
-                    startActivity(Intent(this@SplashScreen, ProfileActivity::class.java))
-                    finish()
-                } else {
-                    startActivity(Intent(this@SplashScreen, HomePage::class.java))
-                    finish()
-                }
             }
         }, 2000)
     }

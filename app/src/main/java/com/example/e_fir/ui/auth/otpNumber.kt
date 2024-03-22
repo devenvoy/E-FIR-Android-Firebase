@@ -2,6 +2,7 @@ package com.example.e_fir.ui.auth
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -9,9 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentOtpNumberBinding
 import com.example.e_fir.ui.Activity.ProfileActivity
+import com.example.e_fir.ui.home.HomePage
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -25,6 +29,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.database
+import com.google.gson.Gson
 import `in`.aabhasjindal.otptextview.OTPListener
 import java.util.concurrent.TimeUnit
 import kotlin.math.log
@@ -45,6 +50,11 @@ class otpNumber : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var myRef: DatabaseReference
 
+    lateinit var user : User
+
+    lateinit var sharedPref: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,6 +71,9 @@ class otpNumber : Fragment() {
         auth = Firebase.auth
         database = Firebase.database
         myRef = database.getReference()
+        sharedPref = requireActivity().getSharedPreferences("USER_DATA", AppCompatActivity.MODE_PRIVATE)
+        editor = sharedPref.edit()
+
 
 
         // get phone number from fragment argument
@@ -204,9 +217,56 @@ class otpNumber : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("====", "signInWithCredential:success")
-                    requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
-                    requireActivity().finish()
-                    val user = task.result?.user
+
+
+                    val currentUser = task.result?.user!!
+
+
+                    myRef.child("USERS/Data/${currentUser.uid}").get()
+                        .addOnSuccessListener { dataSnapshot ->
+                            Log.e("firebase", "Got value ${dataSnapshot.value}")
+                            val userData = dataSnapshot.value as? HashMap<String, Any>
+                            if (userData != null) {
+                                user = User(
+                                    ID = userData["id"] as String? ?: "",
+                                    NAME = userData["name"] as String? ?: "",
+                                    NUMBER = userData["number"] as String? ?: "",
+                                    EMAIL = userData["email"] as String? ?: "",
+                                    GENDER = userData["gender"] as String? ?: "Male",
+                                    AGE = userData["age"] as String? ?: "",
+                                    CITIZENSHIP = userData["citizenship"] as String? ?: "",
+                                    COUNTRY = userData["country"] as String? ?: "",
+                                    STATE = userData["state"] as String? ?: "",
+                                    PINCODE = userData["pincode"] as String? ?: "",
+                                    ADDRESS = userData["address"] as String? ?: "",
+                                    userDp = userData["userDp"] as String?
+                                        ?: "https://firebasestorage.googleapis.com/v0/b/e-fir-434f7.appspot.com/o/Users%2Fuser.jpeg?alt=media&token=31579f13-6e85-49e1-85d2-035c7c4965f4",
+                                    IDPROOFTYPE = userData["idprooftype"] as String? ?: "",
+                                    IDPROOFNUM = userData["idproofnum"] as String? ?: "",
+                                    filled = userData["filled"] as Boolean? ?: false,
+                                )
+                                Log.e("=====", user.toString())
+                                val gson = Gson()
+                                val json = gson.toJson(user)
+                                editor.putString("user", json)
+                                editor.commit()
+
+                                if (!user.filled) {
+                                    requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
+                                    requireActivity().finish()
+                                } else {
+                                    requireActivity().startActivity(Intent(activity, HomePage::class.java))
+                                    requireActivity().finish()
+                                }
+                            } else {
+                                Log.e("firebase", "User data is null")
+                            }
+                        }.addOnFailureListener { exception ->
+                            Log.e("firebase", "Error getting data", exception)
+                        }
+
+
+
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w("====", "signInWithCredential:failure", task.exception)
