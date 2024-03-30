@@ -124,6 +124,7 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.btnSubmit.setOnClickListener {
             // validate form
+                Thread.sleep(2000)
             if (validateForm()) {
 
                 // data reference path to store object

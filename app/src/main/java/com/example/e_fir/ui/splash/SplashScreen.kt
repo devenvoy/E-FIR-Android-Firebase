@@ -63,6 +63,10 @@ class SplashScreen : AppCompatActivity() {
                 val json = sharedPref.getString("user", null)
                 user = Gson().fromJson(json, User::class.java)
 
+                if(user == null){
+                    user = User()
+                }
+
                 if (!user.filled) {
                     startActivity(Intent(this@SplashScreen, ProfileActivity::class.java))
                     finish()

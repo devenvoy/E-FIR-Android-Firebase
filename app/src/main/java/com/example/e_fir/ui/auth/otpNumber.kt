@@ -221,7 +221,6 @@ class otpNumber : Fragment() {
 
                     val currentUser = task.result?.user!!
 
-
                     myRef.child("USERS/Data/${currentUser.uid}").get()
                         .addOnSuccessListener { dataSnapshot ->
                             Log.e("firebase", "Got value ${dataSnapshot.value}")
@@ -255,11 +254,18 @@ class otpNumber : Fragment() {
                                     requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
                                     requireActivity().finish()
                                 } else {
+                                    user = User()
+                                    val gson = Gson()
+                                    val json = gson.toJson(user)
+                                    editor.putString("user", json)
+                                    editor.commit()
                                     requireActivity().startActivity(Intent(activity, HomePage::class.java))
                                     requireActivity().finish()
                                 }
                             } else {
                                 Log.e("firebase", "User data is null")
+                                requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
+                                requireActivity().finish()
                             }
                         }.addOnFailureListener { exception ->
                             Log.e("firebase", "Error getting data", exception)
