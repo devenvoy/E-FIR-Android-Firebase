@@ -164,7 +164,6 @@ class ProfileActivity : AppCompatActivity() {
                 }.addOnFailureListener {
                     showToast("Something Went Wrong")
                 }
-
             } else {
                 showToast("Fill Form Properly")
             }

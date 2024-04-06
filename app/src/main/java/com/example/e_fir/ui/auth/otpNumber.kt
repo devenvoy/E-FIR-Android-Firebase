@@ -32,7 +32,6 @@ import com.google.firebase.database.database
 import com.google.gson.Gson
 import `in`.aabhasjindal.otptextview.OTPListener
 import java.util.concurrent.TimeUnit
-import kotlin.math.log
 
 
 class otpNumber : Fragment() {
@@ -50,7 +49,7 @@ class otpNumber : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var myRef: DatabaseReference
 
-    lateinit var user : User
+    lateinit var user: User
 
     lateinit var sharedPref: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
@@ -71,9 +70,9 @@ class otpNumber : Fragment() {
         auth = Firebase.auth
         database = Firebase.database
         myRef = database.getReference()
-        sharedPref = requireActivity().getSharedPreferences("USER_DATA", AppCompatActivity.MODE_PRIVATE)
+        sharedPref =
+            requireActivity().getSharedPreferences("USER_DATA", AppCompatActivity.MODE_PRIVATE)
         editor = sharedPref.edit()
-
 
 
         // get phone number from fragment argument
@@ -90,7 +89,7 @@ class otpNumber : Fragment() {
 
             override fun onOTPComplete(otp: String) {
                 // fired when user has entered the OTP fully.
-                binding.btnVerifyOtp.isEnabled = true
+
             }
         }
 
@@ -115,18 +114,17 @@ class otpNumber : Fragment() {
 
     // timer counter function
     fun resendTextCounter() {
-
         binding.resendOtp.isEnabled = false
         val timew = object : CountDownTimer(60000, 1000) {
-            @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
                 binding.resendOtp.text = "Resend In :  ${millisUntilFinished / 1000}s"
             }
-
             override fun onFinish() {
+                binding.resendOtp.text = "Resend Otp"
                 binding.resendOtp.isEnabled = true
             }
         }
+        timew.start()
     }
 
 
@@ -145,7 +143,7 @@ class otpNumber : Fragment() {
             optionsBuilder.setForceResendingToken(token) // callback's ForceResendingToken
         }
         PhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build())
-        Log.e("====", "resendVerificationCode", )
+        Log.e("====", "resendVerificationCode")
     }
 
 
@@ -196,6 +194,7 @@ class otpNumber : Fragment() {
             token = p1
             Log.e("====", "$p0    $p1")
             Log.e("====", "$verificationId    $token")
+            binding.btnVerifyOtp.isEnabled = true
         }
     }
 
@@ -221,11 +220,15 @@ class otpNumber : Fragment() {
 
                     val currentUser = task.result?.user!!
 
+                    Log.e("===", "$currentUser")
+
                     myRef.child("USERS/Data/${currentUser.uid}").get()
                         .addOnSuccessListener { dataSnapshot ->
                             Log.e("firebase", "Got value ${dataSnapshot.value}")
                             val userData = dataSnapshot.value as? HashMap<String, Any>
+
                             if (userData != null) {
+
                                 user = User(
                                     ID = userData["id"] as String? ?: "",
                                     NAME = userData["name"] as String? ?: "",
@@ -248,29 +251,45 @@ class otpNumber : Fragment() {
                                 val gson = Gson()
                                 val json = gson.toJson(user)
                                 editor.putString("user", json)
-                                editor.commit()
+                                editor.apply()
 
                                 if (!user.filled) {
-                                    requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
+                                    requireActivity().startActivity(
+                                        Intent(
+                                            activity,
+                                            ProfileActivity::class.java
+                                        )
+                                    )
                                     requireActivity().finish()
                                 } else {
-                                    user = User()
-                                    val gson = Gson()
-                                    val json = gson.toJson(user)
-                                    editor.putString("user", json)
-                                    editor.commit()
-                                    requireActivity().startActivity(Intent(activity, HomePage::class.java))
+
+                                    requireActivity().startActivity(
+                                        Intent(
+                                            activity,
+                                            HomePage::class.java
+                                        )
+                                    )
                                     requireActivity().finish()
                                 }
                             } else {
+                                user = User()
+                                val gson = Gson()
+                                val json = gson.toJson(user)
+                                editor.putString("user", json)
+                                editor.commit()
+
                                 Log.e("firebase", "User data is null")
-                                requireActivity().startActivity(Intent(activity, ProfileActivity::class.java))
+                                requireActivity().startActivity(
+                                    Intent(
+                                        activity,
+                                        ProfileActivity::class.java
+                                    )
+                                )
                                 requireActivity().finish()
                             }
                         }.addOnFailureListener { exception ->
                             Log.e("firebase", "Error getting data", exception)
                         }
-
 
 
                 } else {

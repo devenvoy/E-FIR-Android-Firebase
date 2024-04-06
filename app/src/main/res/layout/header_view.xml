@@ -20,11 +20,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="-10dp"
-        android:layout_marginBottom="5dp"
         android:fontFamily="@font/poppins"
         android:textColor="@color/black"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/userName"
         android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginHorizontal="20dp"
         android:fontFamily="@font/poppins"
         android:textColor="@color/black"
         android:textStyle="bold" />

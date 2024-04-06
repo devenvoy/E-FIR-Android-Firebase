@@ -27,6 +27,7 @@ import com.example.e_fir.data.constants.Companion.suratpolicestnList
 import com.example.e_fir.data.modal.FIR
 import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentRegisterFirBinding
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -211,7 +212,13 @@ class RegisterFirFragment : Fragment() {
 
         // take image from user device
         binding.upldSign.setOnClickListener {
-            selectImageLauncher.launch("image/*")
+            ImagePicker.with(this)
+                .compress(256)         //Final image size will be less than 1 MB(Optional)
+                .maxResultSize(200, 200)  //Final image resolution will be less than 1080 x 1080(Optional)
+                .createIntent { intent ->
+                    selectImageLauncher.launch("image/*")
+                }
+
         }
 
     }
@@ -405,6 +412,10 @@ class RegisterFirFragment : Fragment() {
 
         return byteBuffer.toByteArray()
     }
+
+
+
+
 
     fun basicState(self: Boolean) {
         if (self) {

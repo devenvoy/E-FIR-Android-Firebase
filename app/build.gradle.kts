@@ -70,7 +70,6 @@ dependencies {
     // circle imageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
@@ -80,16 +79,15 @@ dependencies {
     // Auth
     implementation("com.google.firebase:firebase-auth")
 
-
     implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
 
     implementation("com.google.firebase:firebase-storage-ktx")
-
 
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
 
+    implementation("com.github.dhaval2404:imagepicker:2.1")
 
     implementation ("com.firebaseui:firebase-ui-database:8.0.2")
 
