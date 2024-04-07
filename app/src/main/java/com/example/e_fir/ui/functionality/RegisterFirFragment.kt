@@ -2,9 +2,13 @@ package com.example.e_fir.ui.functionality
 
 import android.content.ContentResolver
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -28,6 +32,7 @@ import com.example.e_fir.data.modal.FIR
 import com.example.e_fir.data.modal.User
 import com.example.e_fir.databinding.FragmentRegisterFirBinding
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.android.play.integrity.internal.c
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -213,7 +218,7 @@ class RegisterFirFragment : Fragment() {
         // take image from user device
         binding.upldSign.setOnClickListener {
             ImagePicker.with(this)
-                .compress(256)         //Final image size will be less than 1 MB(Optional)
+                .compress(50)         //Final image size will be less than 1 MB(Optional)
                 .maxResultSize(200, 200)  //Final image resolution will be less than 1080 x 1080(Optional)
                 .createIntent { intent ->
                     selectImageLauncher.launch("image/*")
@@ -358,7 +363,12 @@ class RegisterFirFragment : Fragment() {
 
         // convert image to bytes array
         val contentResolver = requireContext().contentResolver
-        val imageBytes = uri.toBytes(contentResolver)
+        /*val imageBytes = uri.toBytes(contentResolver)*/
+
+        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos)
+        val imageBytes = baos.toByteArray()
 
         // Create a reference to the file in Firebase Storage
         val storageRef = storage.reference.child("images/${File(uri.path!!).name}")

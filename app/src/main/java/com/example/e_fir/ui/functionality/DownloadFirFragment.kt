@@ -125,6 +125,18 @@ class DownloadFirFragment : Fragment() {
         binding.firRecyclerView.adapter = adapter
         changeFirList()
 
+        binding.resetDate.setOnClickListener {
+            val currentDate = getCurrentDate()
+            val year = currentDate.year
+            val month = currentDate.monthValue
+            val day = currentDate.dayOfMonth
+
+            val selectedDate =
+                LocalDate.of(year,month,day).toString()
+            binding.startDate.setText(selectedDate)
+            binding.endDate.setText(selectedDate)
+            changeFirList()
+        }
     }
 
 
@@ -175,7 +187,7 @@ class DownloadFirFragment : Fragment() {
                 // Update the EditText with the selected date
                 val selectedDate =
                     LocalDate.of(selectedYear, selectedMonth + 1, selectedDay).toString()
-                if ((selectedDate <= getCurrentDate().toString()) || (binding.startDate.text.toString() <= binding.endDate.text.toString())) {
+                if ((selectedDate <= getCurrentDate().toString()) && (binding.startDate.text.toString() <= binding.endDate.text.toString())) {
                     editText.setText(selectedDate)
                     changeFirList()
                 } else {
